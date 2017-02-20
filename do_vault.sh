@@ -268,7 +268,7 @@ do_vault() {
         fi
 
         #generate an unique key
-        echo "$((count++)).Generating unique $keyfile of $key_length bytes for rsa $module bits"
+        echo "$((count++)).Generating unique $keyfile of $key_length bytes"
         if ! openssl rand $key_length -out $keyfile; then
              err "$keyfile couldn't be generated. Exit!" 
         fi

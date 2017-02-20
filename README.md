@@ -70,7 +70,7 @@ Now you can use it to encrypt/decrypt with:
 #do_vault.sh -p liloman@github.com -e firefox/
 Encrypting firefox/ directory for profile: liloman@github.com
 ============================================================
-1.Generating unique /dev/shm/secret_key of 500 bytes for rsa 4096 bits
+1.Generating unique /dev/shm/secret_key of 500 bytes 
 2.Generating /dev/shm/secret_key.enc with rsa 4096 bits
 3.Generating metadata file /dev/shm/file.esp.enc with rsa 4096 bits
 4.Generating files.enc with aes-256-cbc KDF SHA256 with /dev/shm/secret_key
