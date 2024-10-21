@@ -165,13 +165,13 @@ do_vault() {
 
         #Enter your pass phrase
         echo "$((count++)).Decrypting unique $keyfile_enc"
-        if ! openssl rsautl -decrypt -ssl -inkey "$private_key" -in $keyfile_enc -out $keyfile -passin file:$lpass_file; then
+        if ! openssl pkeyutl -decrypt  -inkey "$private_key" -in $keyfile_enc -out $keyfile -passin file:$lpass_file; then
              err "$keyfile_enc couldn't be decrypted. Exit!" 
         fi
 
         #Enter your pass phrase
         echo "$((count++)).Decrypting metadata file $metadata_enc"
-        if ! openssl rsautl -decrypt -ssl -inkey "$private_key" -in $metadata_enc -out $metadata -passin file:$lpass_file; then
+        if ! openssl pkeyutl -decrypt -inkey "$private_key" -in $metadata_enc -out $metadata -passin file:$lpass_file; then
              err "$metadata_enc couldn't be decrypted. Exit!" 
         fi
 
@@ -204,7 +204,7 @@ do_vault() {
         fi
 
         echo "$((count++)).Decrypting $vault_file_enc with $sym_algo KDF $dgst_algo and $salt"
-        if ! openssl $sym_algo -md $dgst_algo -d -in "$vault_file_enc" -pass file:$keyfile | tar xvz; then
+        if ! openssl $sym_algo -md $dgst_algo -pbkdf2 -iter 1000000 -d -in "$vault_file_enc" -pass file:$keyfile | tar xvz; then
              err "$vault_file_enc couldn't be decrypted. Exit!" 
         fi
 
@@ -269,13 +269,13 @@ do_vault() {
 
         #generate an unique key
         echo "$((count++)).Generating unique $keyfile of $key_length bytes"
-        if ! openssl rand $key_length -out $keyfile; then
+        if ! openssl rand -out $keyfile $key_length;  then
              err "$keyfile couldn't be generated. Exit!" 
         fi
 
         #encrypt the keyfile
         echo "$((count++)).Generating $keyfile_enc with rsa $module bits"
-        if ! openssl rsautl -encrypt -pubin -inkey "$pkcs8_key" -in $keyfile -out $keyfile_enc; then
+        if ! openssl pkeyutl -encrypt -pubin -inkey "$pkcs8_key" -in $keyfile -out $keyfile_enc; then
                 err "$keyfile_enc couldn't be generated from $pkcs8_key. Exit!"
         fi
 
@@ -297,13 +297,13 @@ do_vault() {
         openssl rand 45   >> $metadata
         #encrypt $metadata file
         echo "$((count++)).Generating metadata file $metadata_enc with rsa $module bits"
-        if ! openssl rsautl -encrypt -pubin -inkey "$pkcs8_key" -in $metadata -out $metadata_enc; then
+        if ! openssl pkeyutl -encrypt -pubin -inkey "$pkcs8_key" -in $metadata -out $metadata_enc; then
                 err "$metadata_enc couldn't be generated from $pkcs8_key. Exit!"
         fi
 
         #encrypt the targzed dir
         echo  "$((count++)).Generating $vault_file_enc with $sym_algo KDF $dgst_algo with $keyfile"
-        if ! tar czf - -C "$dir" "$dest" | openssl $sym_algo -md $dgst_algo -salt -out $vault_file_enc -pass file:$keyfile ; then
+        if ! tar czf - -C "$dir" "$dest" | openssl $sym_algo -md $dgst_algo -pbkdf2 -iter 1000000  -salt -out $vault_file_enc -pass file:$keyfile ; then
                 err "$vault_file_enc couldn't be generated. Exit!"
         fi
 

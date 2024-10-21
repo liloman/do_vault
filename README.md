@@ -26,7 +26,7 @@ Examples:
 2.Generate your github's keys:
   do_vault.sh -p github -g
 3.Encrypt 'my secret dir' with the default profile:
-  do_vault.sh -e "my secret dir":
+  do_vault.sh -e "my secret dir"
 4.Decrypt vault.enc.tgz with backups@lenny's profile
   do_vault.sh -p backups@lenny -d
 5.Decrypt private.tgz with the default profile:
