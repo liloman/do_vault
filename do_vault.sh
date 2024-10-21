@@ -355,7 +355,7 @@ do_vault() {
         "2.Generate your github's keys:"
         "  $software -p github -g"
         "3.Encrypt 'my secret dir' with the default profile:"
-        "  $software -e \"my secret dir\":"
+        "  $software -e \"my secret dir\""
         "4.Decrypt $tgz with backups@lenny's profile"
         "  $software -p backups@lenny -d"
         "5.Decrypt private.tgz with the default profile:"
