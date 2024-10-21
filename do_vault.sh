@@ -94,7 +94,7 @@ do_vault() {
         if [[ -f $private_key ]]; then
             read -p "$private_key already exists. Do you want to overwrite it (Yy/Nn)? " -n 1 -r
             echo "" #move to newline
-            [[ $REPLY =~ ^[Yy]$ ]] || err "$private_key exists. Exit!"
+            [[ $REPLY =~ ^[Yy]$ ]] || general_err "$private_key exists. Exit!"
             shred -uzf "$private_key" "$public_key" "$pkcs8_key"
         fi
 
